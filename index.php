@@ -13,7 +13,9 @@
         </div>
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a onclick="showLoginModal()">Login</a></li>
+            <?php if($_COOKIE["sid"] == ""): ?>
+                <li><a onclick="showLoginModal()">Login</a></li>
+            <?php endif; ?>
         </ul>
     </nav>
 </head>
@@ -61,9 +63,8 @@
 
 <?php
 if($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST["submit-login"]) || isset($_POST["submit-register"]))){
-    echo "NONE";
     #header('Location: localhost/beats/BeatsJunior');
-    redirect("/");
+    #redirect("/");
     $username = $_POST['username'];
     $password = $_POST['password'];
     
@@ -77,20 +78,31 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST["submit-login"]) || iss
             $stmt = $conn->prepare("insert into register(username, password) values(?, ?)");
             $stmt->bind_param("ss", $username, $password);
             $stmt->execute();
-            echo "Registration successfully...";
-            $stmt->close();
-            $conn->close();
-        }else if(isset($_POST["submit-login"])){
-            $stmt=$con->prepare("select * from register where username = ?");
+            setcookie('siddd',$id,time() + (86400 * 7));
+            
+            $stmt=$conn->prepare("select * from register where username = ?");
             $stmt->bind_param("s",$username);
             $stmt->execute();
             $stmt_result=$stmt->get_result();
             if($stmt_result->num_rows>0){
-            $data=$stmt_result->fetch_assoc();
-            if($data['password']===$password){
-                echo "succesful";
-                redirect("./index.php");
+                $data=$stmt_result->fetch_assoc();
+                $id = $data['id'];
+                setcookie('sid',$id,time() + (86400 * 7));
+                redirect("/");
             }
+            $stmt->close();
+            $conn->close();
+        }else if(isset($_POST["submit-login"])){
+            $stmt=$conn->prepare("select * from register where username = ?");
+            $stmt->bind_param("s",$username);
+            $stmt->execute();
+            $stmt_result=$stmt->get_result();
+            if($stmt_result->num_rows>0){
+                $data=$stmt_result->fetch_assoc();
+                if($data['password']===$password){
+                    echo "succesful";
+                    redirect("/");
+                }
             }else{
                 echo "invalid";
             }
@@ -117,10 +129,10 @@ function showLoginModal(){
     console.log(modal.dataset.active)
     if(!modal.classList.contains("active") && modal.dataset.active === "0"){
        modal.style.display = "block";
+        document.getElementById("overlay").classList.add("active");
        setTimeout(() => {
             modal.classList.add("active");
             document.getElementById("overlay").style.display = "block";
-            document.getElementById("overlay").classList.add("active");
        },400);
     }else if(modal.dataset.active === "1"){
        modal.classList.remove("active");
