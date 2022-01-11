@@ -152,6 +152,15 @@ button[type=button]{
    z-index: 5;
 }
 
+input{
+    transition-duration: 200ms;
+}
+input[type=password].wrong{
+    box-shadow: 0 0 0 2px red;
+}
+input[type=password].success{
+    box-shadow: 0 0 0 2px green;
+}
 
 
  /* {

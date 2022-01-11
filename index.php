@@ -27,16 +27,16 @@
 
     
     <div class="login modal" id="login-modal" data-active="0">
-        <form id="register" action="/" method="post">
+        <form id="register" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <p>Username:</p>
             <input type="text" name="username" required>
             <p>Password:</p>
-            <input type="password" name="password" required>
+            <input oninput="passwordChecker(this)" type="password" name="password" required>
             </br>
             <input type="submit" name="submit-register" value="Register">
             <button type="button" data-value="login" onclick="changeLogin(this)">Login</button>
         </form>
-        <form id="login" action="/" method="post">
+        <form id="login" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <p>Username:</p>
             <input type="text" name="username" required>
             <p>Password:</p>
@@ -60,7 +60,10 @@
 
 
 <?php
-if(isset($_POST["submit-login"]) || isset($_POST["submit-register"])){
+if($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST["submit-login"]) || isset($_POST["submit-register"]))){
+    echo "NONE";
+    #header('Location: localhost/beats/BeatsJunior');
+    redirect("/");
     $username = $_POST['username'];
     $password = $_POST['password'];
     
@@ -116,7 +119,7 @@ function showLoginModal(){
        modal.style.display = "block";
        setTimeout(() => {
             modal.classList.add("active");
-            document.getElementById("overlay").style.display = block;
+            document.getElementById("overlay").style.display = "block";
             document.getElementById("overlay").classList.add("active");
        },400);
     }else if(modal.dataset.active === "1"){
@@ -129,11 +132,30 @@ function showLoginModal(){
     window.addEventListener("click", (e) => {
         if(modal.classList.contains("active") && !e.target.closest("#login-modal")){
             modal.classList.remove("active");
-            document.getElementById("overlay").style.display = none;
+            document.getElementById("overlay").style.display = "none";
             document.getElementById("overlay").classList.remove("active");
         }
     })
     
+
+
+}
+
+
+
+function passwordChecker(e){
+    const value = e.value;
+    let spChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.\/?]+/;
+    if((value.length > 0 && value.length < 6) || (value.length > 0 &&!spChars.test(value))){
+        e.classList.add("wrong");
+        e.classList.remove("success");
+    }else if(value.length >= 6 && spChars.test(value)){
+        e.classList.add("success");
+        e.classList.remove("wrong");
+    }else if(value.length == 0){
+        e.classList.remove("success");
+        e.classList.remove("wrong");
+    }
 }
 
 </script>
