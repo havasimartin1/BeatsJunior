@@ -27,7 +27,6 @@ $con = new mysqli('localhost','root','','beatsjunior');
 	echo "invalid";
 	}
 	}
-
 ?>
 </body>
 </html>
