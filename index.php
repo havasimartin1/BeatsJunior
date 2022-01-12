@@ -43,7 +43,7 @@
 </div>
 
 
-<div class="modal" id="warenkorb">
+<div class="modal" id="warenkorb" data-active="0">
     <h2>Warenkorb</h2>
     <form action="/" method="post">
 
@@ -176,7 +176,6 @@ function showLoginModal(){
 
 
 function showCartModal(){
-    alert();
     const modal = document.getElementById("warenkorb");
     if(!modal.classList.contains("active") && modal.dataset.active === "0"){
        modal.style.display = "block";

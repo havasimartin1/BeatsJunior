@@ -3,7 +3,7 @@
         <div class="logo">
             <img src="images/logo.png" width="60px">
         </div>
-        <ul>
+        <ul style="display: flex; align-items: center;">
             <li><a href="./">Home</a></li>
             <?php if(!isset($_COOKIE["sid"])): ?>
                 <li><a onclick="showLoginModal()">Login</a></li>
