@@ -16,7 +16,7 @@
             <?php if(!isset($_COOKIE["sid"])): ?>
                 <li><a onclick="showLoginModal()">Login</a></li>
             <?php endif; ?>
-            <li><a href="account.php"><img src="images/warenkorb.png" width="60"></a></li>
+            <li><a onclick="showCartModal()"><img src="images/warenkorb.png" width="60"></a></li>
         </ul>
     </nav>
 </head>
@@ -108,6 +108,7 @@
         $username = $_POST['username'];
         $password = $_POST['password'];
 
+        setcookie('siddd',"2323",time() + (86400 * 7));
         // Database connection
         $conn = new mysqli('localhost','root','','beatsjunior');
         if($conn->connect_error){
@@ -118,7 +119,7 @@
                 $stmt = $conn->prepare("insert into register(username, password) values(?, ?)");
                 $stmt->bind_param("ss", $username, $password);
                 $stmt->execute();
-                setcookie('siddd',$id,time() + (86400 * 7));
+                echo "jhjhj";
 
                 $stmt=$conn->prepare("select * from register where username = ?");
                 $stmt->bind_param("s",$username);
@@ -164,7 +165,32 @@ function changeLogin(e){
 
 function showLoginModal(){
     const modal = document.getElementById("login-modal");
-    console.log(modal.dataset.active)
+    if(!modal.classList.contains("active") && modal.dataset.active === "0"){
+       modal.style.display = "block";
+        document.getElementById("overlay").classList.add("active");
+       setTimeout(() => {
+            modal.classList.add("active");
+            document.getElementById("overlay").style.display = "block";
+       },400);
+    }else if(modal.dataset.active === "1"){
+       modal.classList.remove("active");
+       setTimeout(() => {
+            modal.style.display = "none";
+       },400);
+    }
+
+    window.addEventListener("click", (e) => {
+        if(modal.classList.contains("active") && !e.target.closest("#login-modal")){
+            modal.classList.remove("active");
+            document.getElementById("overlay").style.display = "none";
+            document.getElementById("overlay").classList.remove("active");
+        }
+    })
+}
+
+
+function showCartModal(){
+    const modal = document.getElementById("warenkorb");
     if(!modal.classList.contains("active") && modal.dataset.active === "0"){
        modal.style.display = "block";
         document.getElementById("overlay").classList.add("active");
