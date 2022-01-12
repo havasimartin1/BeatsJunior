@@ -16,10 +16,25 @@
             <?php if(!isset($_COOKIE["sid"])): ?>
                 <li><a onclick="showLoginModal()">Login</a></li>
             <?php endif; ?>
+            <li><a href="account.php"><img src="images/warenkorb.png" width="60"></a></li>
         </ul>
     </nav>
 </head>
 <body>
+    <?php 
+        $conn = new mysqli('localhost','root','','beatsjunior');
+        $beats = [];
+        if($conn->connect_error){
+            echo "$conn->connect_error";
+            die("Connection Failed : ". $conn->connect_error);
+        } else {
+            $stmt=$conn->prepare("select * from beats");
+            $stmt->execute();
+            $beats=$stmt->get_result();
+            $stmt->close();
+            $conn->close();
+        }
+    ?>
     <div id="overlay"></div>
 <div class="main2">
     <h1>Willkommen bei Beats Junior</h1>
@@ -27,23 +42,33 @@
     <hr>
     <div class="audiotable">
         <table>
+            <?php if($beats->num_rows>0): ?>
+                <?php while($row = $beats->fetch_assoc()): ?>
+                    <tr><td><?php echo htmlspecialchars($row["titel"]) ?></td><td><audio controls preload='auto'><source src='<?php echo htmlspecialchars($row["media_url"]) ?>' type='audio/wav'></audio><br></td><?php if(isset($_COOKIE["sid"])): ?> <button data-product_id='<?php echo htmlspecialchars($row["id"]) ?>' name='Warenkorb' type='button'>In den Warenkorb</button><?php endif;?></tr>
+
+                <?php endwhile;?>
+            <?php endif;?>
             <tr><td>Again</td><td><audio controls preload="auto"><source src="beats/Again.wav" type="audio/wav"></audio><br></td></tr>
             <tr><td>America</td><td><audio controls preload="auto"><source src="beats/America.wav" type="audio/wav"></audio><br></td></tr>
-            <tr><td>Bree</td><td><audio controls preload="auto"><source src="beats/Bree.wav" type="audio/wav"></audio><br></td></tr>
-            <tr><td>Donkey</td><td><audio controls preload="auto"><source src="beats/Donkey.wav" type="audio/wav"></audio><br></td></tr>
-            <tr><td>Fiddy</td><td><audio controls preload="auto"><source src="beats/Fiddy.wav" type="audio/wav"></audio><br></td></tr>
-            <tr><td>Heaven</td><td><audio controls preload="auto"><source src="beats/Heaven.mp3" type="audio/wav"></audio><br></td></tr>
-            <tr><td>NGGYU</td><td><audio controls preload="auto"><source src="beats/Never_Gonna_Give_%20You_Up.wav" type="audio/wav"></audio><br></td></tr>
-            <tr><td>Old Macdonald</td><td><audio  controls preload="auto"><source src="beats/Old_macdonald.wav" type="audio/wav"></audio><br></td></tr>
-            <tr><td>Old School</td><td><audio controls preload="auto"><source src="beats/Old_School.wav" type="audio/wav"></audio><br></td></tr>
-            <tr><td>Sick</td><td><audio  controls preload="auto"><source src="beats/Sick.wav" type="audio/wav"></audio><br></td></tr>
-            <tr><td>Spongedrill</td><td><audio controls preload="auto"><source src="beats/Spongedrill.wav" type="audio/wav"></audio><br></td></tr>
-            <tr><td>The Call</td><td><audio controls preload="auto"><source src="beats/The_Call.wav" type="audio/wav"></audio><br></td></tr>
-            <tr><td>Tokyo</td><td><audio controls preload="auto"><source src="beats/Tokyo.wav" type="audio/wav"></audio><br></td></tr>
-            <tr><td>Whistle</td><td><audio controls preload="auto"><source src="beats/Whistle.wav" type="audio/wav"></audio><br></td></tr>
         </table>
     </div>
 </div>
+
+
+<div class="modal" id="warenkorb">
+    <h2>Warenkorb</h2>
+    <form action="/" method="post">
+
+        <input type="submit" value="jetzt kaufen!"/>
+    </form>
+</div>
+
+
+
+
+
+
+
     <div class="login modal" id="login-modal" data-active="0">
         <form id="register" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <p>Username:</p>
