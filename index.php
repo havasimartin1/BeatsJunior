@@ -21,11 +21,29 @@
 </head>
 <body>
     <div id="overlay"></div>
-<main>
-    <div class ="text">
-        <h1>Willkommen bei Beats Junior</h1>
-        <p>hier werden beats verkauft amk</p>
+<div class="main2">
+    <h1>Willkommen bei Beats Junior</h1>
+    <p>hier werden beats verkauft amk</p>
+    <hr>
+    <div class="audiotable">
+        <table>
+            <tr><td>Again</td><td><audio controls preload="auto"><source src="beats/Again.wav" type="audio/wav"></audio><br></td></tr>
+            <tr><td>America</td><td><audio controls preload="auto"><source src="beats/America.wav" type="audio/wav"></audio><br></td></tr>
+            <tr><td>Bree</td><td><audio controls preload="auto"><source src="beats/Bree.wav" type="audio/wav"></audio><br></td></tr>
+            <tr><td>Donkey</td><td><audio controls preload="auto"><source src="beats/Donkey.wav" type="audio/wav"></audio><br></td></tr>
+            <tr><td>Fiddy</td><td><audio controls preload="auto"><source src="beats/Fiddy.wav" type="audio/wav"></audio><br></td></tr>
+            <tr><td>Heaven</td><td><audio controls preload="auto"><source src="beats/Heaven.mp3" type="audio/wav"></audio><br></td></tr>
+            <tr><td>NGGYU</td><td><audio controls preload="auto"><source src="beats/Never_Gonna_Give_%20You_Up.wav" type="audio/wav"></audio><br></td></tr>
+            <tr><td>Old Macdonald</td><td><audio  controls preload="auto"><source src="beats/Old_macdonald.wav" type="audio/wav"></audio><br></td></tr>
+            <tr><td>Old School</td><td><audio controls preload="auto"><source src="beats/Old_School.wav" type="audio/wav"></audio><br></td></tr>
+            <tr><td>Sick</td><td><audio  controls preload="auto"><source src="beats/Sick.wav" type="audio/wav"></audio><br></td></tr>
+            <tr><td>Spongedrill</td><td><audio controls preload="auto"><source src="beats/Spongedrill.wav" type="audio/wav"></audio><br></td></tr>
+            <tr><td>The Call</td><td><audio controls preload="auto"><source src="beats/The_Call.wav" type="audio/wav"></audio><br></td></tr>
+            <tr><td>Tokyo</td><td><audio controls preload="auto"><source src="beats/Tokyo.wav" type="audio/wav"></audio><br></td></tr>
+            <tr><td>Whistle</td><td><audio controls preload="auto"><source src="beats/Whistle.wav" type="audio/wav"></audio><br></td></tr>
+        </table>
     </div>
+</div>
     <div class="login modal" id="login-modal" data-active="0">
         <form id="register" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <p>Username:</p>
@@ -143,12 +161,7 @@ function showLoginModal(){
             document.getElementById("overlay").classList.remove("active");
         }
     })
-    
-
-
 }
-
-
 
 function passwordChecker(e){
     const value = e.value;
@@ -164,13 +177,10 @@ function passwordChecker(e){
         e.classList.remove("wrong");
     }
 }
-
 </script>
-
-
 </body>
 <style>
-    main{
+    .main2{
         background-image: url(images/polygon.jpg);
     }
 </style>
