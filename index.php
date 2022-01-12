@@ -107,7 +107,6 @@
         $username = $_POST['username'];
         $password = $_POST['password'];
 
-        setcookie('siddd',"2323",time() + (86400 * 7));
         // Database connection
         $conn = new mysqli('localhost','root','','beatsjunior');
         if($conn->connect_error){
@@ -118,7 +117,6 @@
                 $stmt = $conn->prepare("insert into register(username, password) values(?, ?)");
                 $stmt->bind_param("ss", $username, $password);
                 $stmt->execute();
-                echo "jhjhj";
 
                 $stmt=$conn->prepare("select * from register where username = ?");
                 $stmt->bind_param("s",$username);
@@ -128,10 +126,10 @@
                     $data=$stmt_result->fetch_assoc();
                     $id = $data['id'];
                     setcookie('sid',$id,time() + (86400 * 7));
-                    redirect("/");
                 }
                 $stmt->close();
                 $conn->close();
+                header('Location: /BeatsJunior');
             }else if(isset($_POST["submit-login"])){
                 $stmt=$conn->prepare("select * from register where username = ?");
                 $stmt->bind_param("s",$username);
@@ -141,7 +139,7 @@
                     $data=$stmt_result->fetch_assoc();
                     if($data['password']===$password){
                         echo "succesful";
-                        redirect("/");
+                        header('Location: /BeatsJunior');
                     }
                 }else{
                     echo "invalid";
