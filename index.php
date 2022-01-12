@@ -12,7 +12,7 @@
             <img src="images/trap%20nation%20logo.jpg" width="100px">
         </div>
         <ul>
-            <li><a href="index.html">Home</a></li>
+            <li><a href="index.php">Home</a></li>
             <?php if($_COOKIE["sid"] == ""): ?>
                 <li><a onclick="showLoginModal()">Login</a></li>
             <?php endif; ?>
