@@ -126,7 +126,9 @@
                 $stmt_result=$stmt->get_result();
                 if($stmt_result->num_rows>0){
                     $data=$stmt_result->fetch_assoc();
+                    $id = $data['id'];
                     if($data['password']===$password){
+                        setcookie('sid',$id,time() + (86400 * 7));
                         echo "succesful";
                         header('Location: /BeatsJunior');
                     }
