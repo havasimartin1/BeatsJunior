@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Beats Junior</title>
-    <link href="./style.css" type="text/css" rel="stylesheet"/>
+    <link href="/BeatsJunior/style.css" type="text/css" rel="stylesheet"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" type="image/png" href="images/favicon-32x32.png">
+    <link rel="shortcut icon" type="image/png" href="/BeatsJunior/images/favicon-32x32.png">
     <nav>
         <div class="logo">
             <img src="images/logo.png" width="90px">
         </div>
         <ul>
-            <li><a href="./">Home</a></li>
+            <li><a href="/BeatsJunior">Home</a></li>
             <?php if(!isset($_COOKIE["sid"])): ?>
                 <li><a onclick="showLoginModal()">Login</a></li>
             <?php endif; ?>
@@ -23,8 +23,8 @@
 </head>
 <body>
     <?php 
-        $setCookie = isset($_COOKIE["sid"]);
         $conn = new mysqli('localhost','root','','beatsjunior');
+        $beats = [];
         if($conn->connect_error){
             echo "$conn->connect_error";
             die("Connection Failed : ". $conn->connect_error);
@@ -38,19 +38,8 @@
     ?>
     <div id="overlay"></div>
 <div class="main2">
-    <h1>Willkommen bei Beats Junior</h1>
-    <p>hier werden beats verkauft amk</p>
+    <h1>Admin Area</h1>
     <hr>
-    <div class="audiotable">
-        <table>
-            <?php if($beats->num_rows>0): ?>
-                <?php while($row = $beats->fetch_assoc()): ?>
-                    <tr><td><?php echo htmlspecialchars($row["titel"]) ?></td><td><audio controls preload='auto'><source src='<?php echo htmlspecialchars($row["media_url"]) ?>' type='audio/wav'></audio><br></td><?php if($setCookie): ?> <button data-product_id='<?php echo htmlspecialchars($row["id"]) ?>' name='Warenkorb' type='button'>In den Warenkorb</button><?php endif;?></tr>
-
-                <?php endwhile;?>
-            <?php endif;?>
-        </table>
-    </div>
 </div>
 
 
