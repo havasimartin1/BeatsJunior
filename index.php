@@ -26,8 +26,6 @@
         <h1>Willkommen bei Beats Junior</h1>
         <p>hier werden beats verkauft amk</p>
     </div>
-
-    
     <div class="login modal" id="login-modal" data-active="0">
         <form id="register" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <p>Username:</p>
@@ -60,58 +58,55 @@
     </ul>
 </footer>
 
+    <?php
+    if($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST["submit-login"]) || isset($_POST["submit-register"]))){
+        #header('Location: localhost/beats/BeatsJunior');
+        #redirect("/");
+        $username = $_POST['username'];
+        $password = $_POST['password'];
 
-<?php
-if($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST["submit-login"]) || isset($_POST["submit-register"]))){
-    #header('Location: localhost/beats/BeatsJunior');
-    #redirect("/");
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    
-    // Database connection
-    $conn = new mysqli('localhost','root','','beatsjunior');
-    if($conn->connect_error){
-        echo "$conn->connect_error";
-        die("Connection Failed : ". $conn->connect_error);
-    } else {
-        if(isset($_POST["submit-register"])){
-            $stmt = $conn->prepare("insert into register(username, password) values(?, ?)");
-            $stmt->bind_param("ss", $username, $password);
-            $stmt->execute();
-            setcookie('siddd',$id,time() + (86400 * 7));
-            
-            $stmt=$conn->prepare("select * from register where username = ?");
-            $stmt->bind_param("s",$username);
-            $stmt->execute();
-            $stmt_result=$stmt->get_result();
-            if($stmt_result->num_rows>0){
-                $data=$stmt_result->fetch_assoc();
-                $id = $data['id'];
-                setcookie('sid',$id,time() + (86400 * 7));
-                redirect("/");
-            }
-            $stmt->close();
-            $conn->close();
-        }else if(isset($_POST["submit-login"])){
-            $stmt=$conn->prepare("select * from register where username = ?");
-            $stmt->bind_param("s",$username);
-            $stmt->execute();
-            $stmt_result=$stmt->get_result();
-            if($stmt_result->num_rows>0){
-                $data=$stmt_result->fetch_assoc();
-                if($data['password']===$password){
-                    echo "succesful";
+        // Database connection
+        $conn = new mysqli('localhost','root','','beatsjunior');
+        if($conn->connect_error){
+            echo "$conn->connect_error";
+            die("Connection Failed : ". $conn->connect_error);
+        } else {
+            if(isset($_POST["submit-register"])){
+                $stmt = $conn->prepare("insert into register(username, password) values(?, ?)");
+                $stmt->bind_param("ss", $username, $password);
+                $stmt->execute();
+                setcookie('siddd',$id,time() + (86400 * 7));
+
+                $stmt=$conn->prepare("select * from register where username = ?");
+                $stmt->bind_param("s",$username);
+                $stmt->execute();
+                $stmt_result=$stmt->get_result();
+                if($stmt_result->num_rows>0){
+                    $data=$stmt_result->fetch_assoc();
+                    $id = $data['id'];
+                    setcookie('sid',$id,time() + (86400 * 7));
                     redirect("/");
                 }
-            }else{
-                echo "invalid";
+                $stmt->close();
+                $conn->close();
+            }else if(isset($_POST["submit-login"])){
+                $stmt=$conn->prepare("select * from register where username = ?");
+                $stmt->bind_param("s",$username);
+                $stmt->execute();
+                $stmt_result=$stmt->get_result();
+                if($stmt_result->num_rows>0){
+                    $data=$stmt_result->fetch_assoc();
+                    if($data['password']===$password){
+                        echo "succesful";
+                        redirect("/");
+                    }
+                }else{
+                    echo "invalid";
+                }
             }
         }
     }
-}
-?>
-
-
+    ?>
 <script> 
 
 function changeLogin(e){
