@@ -8,20 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet">
     <link rel="shortcut icon" type="image/png" href="/BeatsJunior/images/favicon-32x32.png">
-    <nav>
-        <div class="logo">
-            <img src="images/logo.png" width="90px">
-        </div>
-        <ul>
-            <li><a href="/BeatsJunior">Home</a></li>
-            <?php if(!isset($_COOKIE["sid"])): ?>
-                <li><a onclick="showLoginModal()">Login</a></li>
-            <?php endif; ?>
-            <li><a onclick="showCartModal()"><img src="images/warenkorb.png" width="60"></a></li>
-        </ul>
-    </nav>
 </head>
 <body>
+    <?php include "./navigation.php"?>
     <?php 
         $conn = new mysqli('localhost','root','','beatsjunior');
         $beats = [];
@@ -219,8 +208,5 @@ function passwordChecker(e){
 </script>
 </body>
 <style>
-    .main2{
-        background-image: url(images/polygon.jpg);
-    }
 </style>
 </html>

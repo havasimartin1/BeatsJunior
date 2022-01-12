@@ -40,15 +40,22 @@ footer a{
 nav{
     display: flex;
     justify-content: space-between;
-    background: #000000;
+    background: rgba(0,0,0,0.9);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     text-align: right;
     align-items: center;
     text-transform: uppercase;
     text-decoration: none;
     min-height: 8vh;
-    font-size: 30px;
+    font-size: 130%;
     top: 0px;
     width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
 }
 
 main{
@@ -60,6 +67,9 @@ main{
     background-size: cover;
     background-repeat: no-repeat;
     height: 100vh;
+    padding-top: 150px;
+    background-image: url(images/polygon.jpg);
+    background-attachment:fixed;
 }
 .text{
     text-align: center;
@@ -116,6 +126,7 @@ header{
     transform: translateX(-50%) scale(0.8);
     opacity: 0;
     transition: 300ms cubic-bezier(0, 0.5, 0.7, 1.2);
+    display: none;
 }
 .modal.active{
    transform: translateX(-50%) scale(1);
