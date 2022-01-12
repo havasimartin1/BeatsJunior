@@ -85,7 +85,7 @@ header{
  }
  nav ul li a{
      text-decoration: none;
-     color: #ffa800;
+     color: #fdb64d;
      text-transform: uppercase;
  }
 
@@ -93,7 +93,7 @@ header{
      content: '';
      height: 3px;
      width: 0%;
-     background: #ffa800;
+     background: #fdb64d;
      position: absolute;
      left: 0;
      bottom: -10px;

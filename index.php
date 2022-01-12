@@ -7,9 +7,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="images/favicon-32x32.png">
     <nav>
         <div class="logo">
-            <img src="images/trap%20nation%20logo.jpg" width="100px">
+            <img src="images/logo.png" width="90px">
         </div>
         <ul>
             <li><a href="index.php">Home</a></li>
