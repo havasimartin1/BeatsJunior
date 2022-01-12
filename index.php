@@ -13,7 +13,7 @@
         </div>
         <ul>
             <li><a href="index.php">Home</a></li>
-            <?php if($_COOKIE["sid"] == ""): ?>
+            <?php if(!isset($_COOKIE["sid"])): ?>
                 <li><a onclick="showLoginModal()">Login</a></li>
             <?php endif; ?>
         </ul>
