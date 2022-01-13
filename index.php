@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,12 +10,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet">
     <link rel="shortcut icon" type="image/png" href="images/favicon-32x32.png">
+    <script type="text/javascript" src="/script.js"></script>
 </head>
 <body>
     <?php include "./navigation.php"?>
     <?php 
         $setCookie = isset($_COOKIE["sid"]);
-        echo "get";
         $conn = new mysqli('localhost','beatsjunior','Beatsjunior1234','beatsjunior_root');
         if($conn->connect_error){
             echo "$conn->connect_error";
@@ -35,7 +37,13 @@
         <table>
             <?php if($beats->num_rows>0): ?>
                 <?php while($row = $beats->fetch_assoc()): ?>
-                    <tr><td><?php echo htmlspecialchars($row["titel"]) ?></td><td><audio controls preload='auto'><source src='<?php echo htmlspecialchars($row["media_url"]) ?>' type='audio/wav'></audio><br></td><?php if($setCookie): ?> <button data-product_id='<?php echo htmlspecialchars($row["id"]) ?>' name='Warenkorb' type='button'>In den Warenkorb</button><?php endif;?></tr>
+                    <div class="beat-item">
+                        <div><?php echo htmlspecialchars($row["titel"]) ?></div>
+                        <div><audio controls controlsList="nodownload noplaybackrate" preload='auto'><source src='<?php echo htmlspecialchars($row["media_url"]) ?>' type='audio/wav'></audio></div>
+                        <?php if(!$setCookie): ?> 
+                            <div><button onclick="addCart(this)" data-titel='<?php echo htmlspecialchars($row["titel"]) ?>' data-product_id='<?php echo htmlspecialchars($row["id"]) ?>' name='Warenkorb' type='button'>In den Warenkorb</button></div>
+                        <?php endif;?>
+                    </div>
 
                 <?php endwhile;?>
             <?php endif;?>
@@ -47,6 +55,9 @@
 <div class="modal" id="warenkorb" data-active="0">
     <h2>Warenkorb</h2>
     <form action="/" method="post">
+        <div id="cart">
+            
+        </div>
 
         <input type="submit" value="jetzt kaufen!"/>
     </form>
@@ -59,7 +70,7 @@
 
 
     <div class="login modal" id="login-modal" data-active="0">
-        <form id="register" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <form id="register" action="/login.php" method="post">
             <p>Username:</p>
             <input type="text" name="username" required>
             <p>Password:</p>
@@ -68,7 +79,7 @@
             <input type="submit" name="submit-register" value="Register">
             <button type="button" data-value="login" onclick="changeLogin(this)">Login</button>
         </form>
-        <form id="login" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <form id="login" action="/login.php" method="post">
             <p>Username:</p>
             <input type="text" name="username" required>
             <p>Password:</p>
@@ -81,137 +92,7 @@
     </div>
 </div>
 </main>
-<?php include "./footer.php"?>
+<?php include "/users/beatsjunior/www/footer.php"?>
 
-    <?php
-    if($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST["submit-login"]) || isset($_POST["submit-register"]))){
-        #header('Location: localhost/beats/BeatsJunior');
-        #redirect("/");
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-
-        // Database connection
-        $conn = new mysqli('localhost','beatsjunior','Beatsjunior1234','beatsjunior_root');
-        if($conn->connect_error){
-            echo "$conn->connect_error";
-            die("Connection Failed : ". $conn->connect_error);
-        } else {
-            if(isset($_POST["submit-register"])){
-                $stmt = $conn->prepare("insert into User(username, password, admin) values(?, ?, 0)");
-                $stmt->bind_param("ss", $username, $password);
-                $stmt->execute();
-
-                $stmt=$conn->prepare("select * from User where username = ?");
-                $stmt->bind_param("s",$username);
-                $stmt->execute();
-                $stmt_result=$stmt->get_result();
-                if($stmt_result->num_rows>0){
-                    $data=$stmt_result->fetch_assoc();
-                    $id = $data['id'];
-                    setcookie('sid',$id,time() + (86400 * 7));
-                }
-                $stmt->close();
-                $conn->close();
-                header('Location: /');
-            }else if(isset($_POST["submit-login"])){
-                $stmt=$conn->prepare("select * from User where username = ?");
-                $stmt->bind_param("s",$username);
-                $stmt->execute();
-                $stmt_result=$stmt->get_result();
-                if($stmt_result->num_rows>0){
-                    $data=$stmt_result->fetch_assoc();
-                    $id = $data['id'];
-                    if($data['password']===$password){
-                        setcookie('sid',$id,time() + (86400 * 7));
-                        echo "succesful";
-                        header('Location: /');
-                    }
-                }else{
-                    echo "invalid";
-                }
-            }
-        }
-    }
-    ?>
-<script> 
-
-function changeLogin(e){
-    if(e.dataset.value === "login"){
-        document.getElementById("register").style.display = "none";
-        document.getElementById("login").style.display = "block";
-    }else if(e.dataset.value === "register"){
-        document.getElementById("login").style.display = "none";
-        document.getElementById("register").style.display = "block";
-    }
-}
-
-function showLoginModal(){
-    const modal = document.getElementById("login-modal");
-    if(!modal.classList.contains("active") && modal.dataset.active === "0"){
-       modal.style.display = "block";
-        document.getElementById("overlay").classList.add("active");
-       setTimeout(() => {
-            modal.classList.add("active");
-            document.getElementById("overlay").style.display = "block";
-       },400);
-    }else if(modal.dataset.active === "1"){
-       modal.classList.remove("active");
-       setTimeout(() => {
-            modal.style.display = "none";
-       },400);
-    }
-
-    window.addEventListener("click", (e) => {
-        if(modal.classList.contains("active") && !e.target.closest("#login-modal")){
-            modal.classList.remove("active");
-            document.getElementById("overlay").style.display = "none";
-            document.getElementById("overlay").classList.remove("active");
-        }
-    })
-}
-
-
-function showCartModal(){
-    const modal = document.getElementById("warenkorb");
-    if(!modal.classList.contains("active") && modal.dataset.active === "0"){
-       modal.style.display = "block";
-        document.getElementById("overlay").classList.add("active");
-       setTimeout(() => {
-            modal.classList.add("active");
-            document.getElementById("overlay").style.display = "block";
-       },400);
-    }else if(modal.dataset.active === "1"){
-       modal.classList.remove("active");
-       setTimeout(() => {
-            modal.style.display = "none";
-       },400);
-    }
-
-    window.addEventListener("click", (e) => {
-        if(modal.classList.contains("active") && !e.target.closest("#login-modal")){
-            modal.classList.remove("active");
-            document.getElementById("overlay").style.display = "none";
-            document.getElementById("overlay").classList.remove("active");
-        }
-    })
-}
-
-function passwordChecker(e){
-    const value = e.value;
-    let spChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.\/?]+/;
-    if((value.length > 0 && value.length < 6) || (value.length > 0 &&!spChars.test(value))){
-        e.classList.add("wrong");
-        e.classList.remove("success");
-    }else if(value.length >= 6 && spChars.test(value)){
-        e.classList.add("success");
-        e.classList.remove("wrong");
-    }else if(value.length == 0){
-        e.classList.remove("success");
-        e.classList.remove("wrong");
-    }
-}
-</script>
 </body>
-<style>
-</style>
 </html>

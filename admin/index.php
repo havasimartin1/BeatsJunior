@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet">
     <link rel="shortcut icon" type="image/png" href="/BeatsJunior/images/favicon-32x32.png">
+    <script type="text/javascript" src="/script.js"></script>
 </head>
 <body>
     <?php include "./navigation.php"?>
