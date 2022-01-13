@@ -3,21 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Beats Junior</title>
-    <link href="style.css" type="text/css" rel="stylesheet"/>
+    <link href="/style.css" type="text/css" rel="stylesheet"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav>
-        <div class="logo">
-            <img src="images/trap%20nation%20logo.jpg" width="100px">
-        </div>
-        <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="login.html">Login</a></li>
-        </ul>
-    </nav>
+    
+<?php include "./navigation.php"?>
 <main>
     <h1>FAQ</h1><br>
     <h2>Was kann man auf BeatTreasury machen?</h2>
@@ -44,18 +37,6 @@
     </p>
     <!--END OF BODY CONTENT-->
 </main>
-<footer>
-    <ul>
-        <li><a href="faq.html">FAQ</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="privacy.html">Privacy</a></li>
-    </ul>
-</footer>
+<?php include "./footer.php"?>
 </body>
-<style>
-    main{
-        background-image: url(images/polygon.jpg);
-    }
-</style>
 </html>

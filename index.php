@@ -13,12 +13,13 @@
     <?php include "./navigation.php"?>
     <?php 
         $setCookie = isset($_COOKIE["sid"]);
-        $conn = new mysqli('localhost','root','','beatsjunior');
+        echo "get";
+        $conn = new mysqli('localhost','beatsjunior','Beatsjunior1234','beatsjunior_root');
         if($conn->connect_error){
             echo "$conn->connect_error";
             die("Connection Failed : ". $conn->connect_error);
         } else {
-            $stmt=$conn->prepare("select * from beats");
+            $stmt=$conn->prepare("select * from Beat");
             $stmt->execute();
             $beats=$stmt->get_result();
             $stmt->close();
@@ -26,7 +27,7 @@
         }
     ?>
     <div id="overlay"></div>
-<div class="main2">
+<main>
     <h1>Willkommen bei Beats Junior</h1>
     <p>hier werden beats verkauft amk</p>
     <hr>
@@ -40,7 +41,7 @@
             <?php endif;?>
         </table>
     </div>
-</div>
+</main>
 
 
 <div class="modal" id="warenkorb" data-active="0">
@@ -80,14 +81,7 @@
     </div>
 </div>
 </main>
-<footer>
-    <ul>
-        <li><a href="faq.html">FAQ</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="privacy.html">Privacy</a></li>
-    </ul>
-</footer>
+<?php include "./footer.php"?>
 
     <?php
     if($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST["submit-login"]) || isset($_POST["submit-register"]))){
@@ -97,17 +91,17 @@
         $password = $_POST['password'];
 
         // Database connection
-        $conn = new mysqli('localhost','root','','beatsjunior');
+        $conn = new mysqli('localhost','beatsjunior','Beatsjunior1234','beatsjunior_root');
         if($conn->connect_error){
             echo "$conn->connect_error";
             die("Connection Failed : ". $conn->connect_error);
         } else {
             if(isset($_POST["submit-register"])){
-                $stmt = $conn->prepare("insert into register(username, password) values(?, ?)");
+                $stmt = $conn->prepare("insert into User(username, password, admin) values(?, ?, 0)");
                 $stmt->bind_param("ss", $username, $password);
                 $stmt->execute();
 
-                $stmt=$conn->prepare("select * from register where username = ?");
+                $stmt=$conn->prepare("select * from User where username = ?");
                 $stmt->bind_param("s",$username);
                 $stmt->execute();
                 $stmt_result=$stmt->get_result();
@@ -118,9 +112,9 @@
                 }
                 $stmt->close();
                 $conn->close();
-                header('Location: /BeatsJunior');
+                header('Location: /');
             }else if(isset($_POST["submit-login"])){
-                $stmt=$conn->prepare("select * from register where username = ?");
+                $stmt=$conn->prepare("select * from User where username = ?");
                 $stmt->bind_param("s",$username);
                 $stmt->execute();
                 $stmt_result=$stmt->get_result();
@@ -130,7 +124,7 @@
                     if($data['password']===$password){
                         setcookie('sid',$id,time() + (86400 * 7));
                         echo "succesful";
-                        header('Location: /BeatsJunior');
+                        header('Location: /');
                     }
                 }else{
                     echo "invalid";
